@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRouter } from "next/router";
 import { useState } from "react";
-import db from "@/libs/axios";
+import db from "@/lib/axios";
 import Cookies from "js-cookie";
 
 interface LoginSchema {
@@ -17,6 +17,7 @@ interface AuthData {
 }
 
 export const useAuth = () => {
+  const [token, setToken] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -26,9 +27,11 @@ export const useAuth = () => {
     setError(null);
     try {
       const res = await db.post("/login", values);
-      const token = res.data;
+      const token = res.data.token;
+      setToken(token);
       Cookies.set("token", token);
-      router.push("/tasks");
+
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err.response?.data?.error || "Login gagal");
     } finally {
@@ -57,10 +60,11 @@ export const useAuth = () => {
 
   const logout = () => {
     Cookies.remove("token");
-    router.push("/login");
+    router.reload();
   };
 
   return {
+    token,
     login,
     register,
     logout,
