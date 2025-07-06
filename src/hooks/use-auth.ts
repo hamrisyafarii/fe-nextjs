@@ -17,7 +17,6 @@ interface AuthData {
 }
 
 export const useAuth = () => {
-  const [token, setToken] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -28,7 +27,6 @@ export const useAuth = () => {
     try {
       const res = await db.post("/login", values);
       const token = res.data.token;
-      setToken(token);
       Cookies.set("token", token);
 
       router.push("/dashboard");
@@ -59,12 +57,14 @@ export const useAuth = () => {
   };
 
   const logout = () => {
+    const confirm = window.confirm("apakah kamu yakin ingin keluar?");
+    if (!confirm) return;
+    
     Cookies.remove("token");
     router.reload();
   };
 
   return {
-    token,
     login,
     register,
     logout,
