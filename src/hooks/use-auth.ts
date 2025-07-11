@@ -57,9 +57,6 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    const confirm = window.confirm("apakah kamu yakin ingin keluar?");
-    if (!confirm) return;
-    
     Cookies.remove("token");
     router.reload();
   };

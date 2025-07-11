@@ -1,17 +1,20 @@
+import DialogNewTask from "@/components/Fragments/DialogNewTask";
 import StatsCards from "@/components/Fragments/StatsCards";
 import TaskCard from "@/components/Fragments/TaskCard";
 import withAuth from "@/components/hoc/withAuth";
 import Footer from "@/components/Layouts/Footer";
 import Header from "@/components/Layouts/Header";
+import { useAuth } from "@/hooks/use-auth";
 import { useTasks } from "@/hooks/use-task";
-import { AlertCircle, Plus } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 const Dashboard = () => {
   const { error } = useTasks();
+  const { logout } = useAuth();
 
   return (
     <>
-      <Header />
+      <Header onLogout={logout} type="dashboard" />
 
       <div className="min-h-screen bg-gradient-to-br bg-background py-8">
         {error && (
@@ -34,10 +37,7 @@ const Dashboard = () => {
                   Kelola semua task Anda dengan mudah
                 </p>
               </div>
-              <button className="bg-chart-1 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-lg hover:shadow-xl">
-                <Plus className="h-5 w-5" />
-                Tambah Task
-              </button>
+              <DialogNewTask />
             </div>
           </div>
 
