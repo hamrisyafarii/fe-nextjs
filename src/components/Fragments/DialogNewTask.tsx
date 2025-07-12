@@ -22,9 +22,15 @@ import {
 import { TaskDataSchema } from "@/schema/task.schema";
 import { useState } from "react";
 import { useTaskContext } from "@/context/useTaskContext";
+import { useCategoryContext } from "@/context/useCategoryContext";
 
 const DialogNewTask = () => {
   const { createTask } = useTaskContext();
+  const { categories, createCategory } = useCategoryContext();
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<
+    number | undefined
+  >(undefined);
   const [open, setOpen] = useState(false);
   const [taskData, setTaskData] = useState<TaskDataSchema>({
     title: "",
@@ -46,6 +52,7 @@ const DialogNewTask = () => {
 
     const formattedTask: TaskDataSchema = {
       ...taskData,
+      categoryId: selectedCategoryId,
       deadline: taskData.deadline
         ? new Date(taskData.deadline).toISOString()
         : undefined,
@@ -67,8 +74,7 @@ const DialogNewTask = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <PlusCircle className="mr-2" />
-          Tambah Task
+          <PlusCircle />
         </Button>
       </DialogTrigger>
 
@@ -128,6 +134,49 @@ const DialogNewTask = () => {
                 <SelectItem value="MEDIUM">Medium</SelectItem>
                 <SelectItem value="HIGH">High</SelectItem>
                 <SelectItem value="CRITICAL">Critical</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 my-2">
+            <div className="space-y-2 my-2">
+              <Label>Kategori Baru</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="Nama kategori"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                />
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    if (!newCategoryName) return;
+                    await createCategory(newCategoryName);
+                    setNewCategoryName("");
+                  }}
+                >
+                  Tambah
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 my-2">
+            <Label>Pilih Kategori</Label>
+            <Select
+              onValueChange={(value) => setSelectedCategoryId(Number(value))}
+              value={selectedCategoryId?.toString()}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih kategori" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id.toString()}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
