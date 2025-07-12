@@ -17,7 +17,7 @@ const HeroSection = () => {
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-6 tracking-tight">
             Atur Pekerjaan Anda
             <span className="block bg-gradient-to-r from-primary to-chart-1 bg-clip-text text-transparent">
-              Tidak Seperti SebelumnyaTidak Seperti Sebelumnya
+              Tidak Seperti Sebelumnya
             </span>
           </h1>
 

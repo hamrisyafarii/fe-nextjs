@@ -1,4 +1,3 @@
-import { useTasks } from "@/hooks/use-task";
 import {
   AlertCircle,
   Archive,
@@ -7,9 +6,20 @@ import {
   Plus,
   Star,
 } from "lucide-react";
+import DeleteTaskDialog from "@/components/Fragments/DeleteTaskDialog";
+import EditTaskDialog from "@/components/Fragments/EditTaskDialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useTaskContext } from "@/context/useTaskContext";
 
 const TaskCard = () => {
-  const { tasks } = useTasks();
+  const { tasks, deleteTask } = useTaskContext();
+  const { editTask } = useTaskContext();
 
   const getPriorityColor = (priority: string) => {
     switch (priority?.toLowerCase()) {
@@ -60,17 +70,33 @@ const TaskCard = () => {
         tasks.map((task) => (
           <div
             key={task.id}
-            className="bg-gray-100 rounded-xl shadow-sm border border-gray-100 overflow-hidden group"
+            className="bg-background rounded-xl shadow-sm border border-gray-100 overflow-hidden group"
           >
             {/* Card Header */}
-            <div className="p-6 pb-4">
+            <div className="p-6 pb-4 ">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div
-                    className={`w-3 h-3 rounded-full ${getStatusColor(
-                      task.status
-                    )}`}
-                  ></div>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={task.status}
+                      onValueChange={(value) =>
+                        editTask(task.id!, {
+                          ...task,
+                          status: value.toUpperCase() as typeof task.status,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="w-32 h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="PENDING">Pending</SelectItem>
+                        <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                        <SelectItem value="COMPLETED">Completed</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(
                       task.priority
@@ -86,22 +112,26 @@ const TaskCard = () => {
                   {task.isArchived && (
                     <Archive className="h-4 w-4 text-gray-500" />
                   )}
+
+                  <EditTaskDialog task={task} />
+
+                  <DeleteTaskDialog taskId={task.id!} onDelete={deleteTask} />
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-blue-600 transition-colors">
                 {task.title}
               </h3>
 
-              <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+              <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
                 {task.description}
               </p>
             </div>
 
             {/* Card Footer */}
-            <div className="px-6 pb-6">
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2 text-gray-500">
+            <div className="px-6 pb-6 ">
+              <div className="flex items-center justify-between text-sm ">
+                <div className="flex items-center gap-2 text-foreground">
                   <Calendar className="h-4 w-4" />
                   <span
                     className={
@@ -120,7 +150,7 @@ const TaskCard = () => {
                       task.status
                     )}`}
                   ></div>
-                  <span className="text-gray-600 capitalize text-xs">
+                  <span className="text-foreground capitalize text-xs">
                     {task.status || "pending"}
                   </span>
                 </div>
@@ -137,14 +167,14 @@ const TaskCard = () => {
         ))
       ) : (
         <div className="col-span-full">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+          <div className="bg-background rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               Belum ada task dibuat
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Mulai dengan membuat task pertama Anda untuk mengorganisir
               pekerjaan dengan lebih baik.
             </p>
