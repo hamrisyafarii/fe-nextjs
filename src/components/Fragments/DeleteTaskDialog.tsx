@@ -9,9 +9,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface DeleteTaskDialogProps {
   taskId: number;
@@ -30,9 +29,13 @@ const DeleteTaskDialog = ({ taskId, onDelete }: DeleteTaskDialogProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          <Trash2 className="text-red-500" />
-        </Button>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="text-red-600 px-2 py-1.5 flex items-center cursor-pointer hover:bg-muted text-sm rounded-sm"
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          Hapus
+        </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

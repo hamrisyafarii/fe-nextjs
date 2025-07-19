@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -10,17 +9,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Pencil } from "lucide-react";
 import { useCategoryContext } from "@/context/useCategoryContext";
 
 interface EditCategoryDialogProps {
   id: number;
   currentName: string;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditCategoryDialog = ({ id, currentName }: EditCategoryDialogProps) => {
+const EditCategoryDialog = ({
+  id,
+  currentName,
+  open,
+  setOpen,
+}: EditCategoryDialogProps) => {
   const [name, setName] = useState(currentName);
-  const [open, setOpen] = useState(false);
   const { updateCategory } = useCategoryContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,12 +35,6 @@ const EditCategoryDialog = ({ id, currentName }: EditCategoryDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Pencil className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>

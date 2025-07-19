@@ -29,8 +29,8 @@ const DeleteCategoryDialog = ({ id, name }: DeleteCategoryDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="icon">
-          <Trash className="h-4 w-4" />
+        <Button className="bg-red-500 hover:bg-red-700 w-full">
+          <Trash /> Hapus
         </Button>
       </DialogTrigger>
 

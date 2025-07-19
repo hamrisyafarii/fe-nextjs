@@ -27,7 +27,7 @@ export const useAuth = () => {
     try {
       const res = await db.post("/login", values);
       const token = res.data.token;
-      Cookies.set("token", token);
+      Cookies.set("token", token, { secure: true, sameSite: "Strict" });
 
       router.push("/dashboard");
     } catch (err: any) {

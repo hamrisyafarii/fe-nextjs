@@ -26,8 +26,7 @@ import { useCategoryContext } from "@/context/useCategoryContext";
 
 const DialogNewTask = () => {
   const { createTask } = useTaskContext();
-  const { categories, createCategory } = useCategoryContext();
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const { categories } = useCategoryContext();
   const [selectedCategoryId, setSelectedCategoryId] = useState<
     number | undefined
   >(undefined);
@@ -73,8 +72,8 @@ const DialogNewTask = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <PlusCircle />
+        <Button size={"icon"} className="w-auto px-2">
+          <PlusCircle /> Task
         </Button>
       </DialogTrigger>
 
@@ -138,7 +137,7 @@ const DialogNewTask = () => {
             </Select>
           </div>
 
-          <div className="space-y-2 my-2">
+          {/* <div className="space-y-2 my-2">
             <div className="space-y-2 my-2">
               <Label>Kategori Baru</Label>
               <div className="flex items-center gap-2">
@@ -160,7 +159,7 @@ const DialogNewTask = () => {
                 </Button>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="space-y-2 my-2">
             <Label>Pilih Kategori</Label>

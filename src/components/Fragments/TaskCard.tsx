@@ -6,20 +6,37 @@ import {
   Plus,
   Star,
 } from "lucide-react";
-import DeleteTaskDialog from "@/components/Fragments/DeleteTaskDialog";
-import EditTaskDialog from "@/components/Fragments/EditTaskDialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 import { useTaskContext } from "@/context/useTaskContext";
+import { ActionDropdown } from "@/components/Fragments/tasks/ActionDropdown";
+import { TaskDataSchema } from "@/schema/task.schema";
+import React, { useState } from "react";
+import { EditTaskSheet } from "@/components/Fragments/tasks/EditTaskSheet";
+import DeleteTaskDialog from "@/components/Fragments/DeleteTaskDialog";
 
 const TaskCard = () => {
-  const { tasks, deleteTask } = useTaskContext();
-  const { editTask } = useTaskContext();
+  const { tasks, editTask, deleteTask } = useTaskContext();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<TaskDataSchema | null>(null);
+
+  const handleEdit = (task: TaskDataSchema) => {
+    setSelectedTask(task);
+    setIsEditOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteTask(id);
+    } catch (error) {
+      console.error("Gagal menghapus task:", error);
+    }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority?.toLowerCase()) {
@@ -113,9 +130,23 @@ const TaskCard = () => {
                     <Archive className="h-4 w-4 text-gray-500" />
                   )}
 
-                  <EditTaskDialog task={task} />
+                  <ActionDropdown
+                    onEdit={() => handleEdit(task)}
+                    deleteComponent={
+                      <DeleteTaskDialog
+                        taskId={task.id!}
+                        onDelete={handleDelete}
+                      />
+                    }
+                  />
 
-                  <DeleteTaskDialog taskId={task.id!} onDelete={deleteTask} />
+                  {selectedTask && (
+                    <EditTaskSheet
+                      task={selectedTask}
+                      open={isEditOpen}
+                      setOpen={setIsEditOpen}
+                    />
+                  )}
                 </div>
               </div>
 
