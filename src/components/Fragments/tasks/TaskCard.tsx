@@ -18,7 +18,7 @@ import { ActionDropdown } from "@/components/Fragments/tasks/ActionDropdown";
 import { TaskDataSchema } from "@/schema/task.schema";
 import React, { useState } from "react";
 import { EditTaskSheet } from "@/components/Fragments/tasks/EditTaskSheet";
-import DeleteTaskDialog from "@/components/Fragments/DeleteTaskDialog";
+import DeleteTaskDialog from "@/components/Fragments/tasks/DeleteTaskDialog";
 
 const TaskCard = () => {
   const { tasks, editTask, deleteTask } = useTaskContext();
